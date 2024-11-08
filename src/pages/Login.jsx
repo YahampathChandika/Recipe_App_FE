@@ -35,7 +35,7 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white py-12 px-6 md:px-12 rounded-lg shadow-lg w-10/12 md:w-1/4">
         <div className="flex justify-center mb-6">
           <img src={logo} alt="Logo" className="w-32 md:w-48" />
