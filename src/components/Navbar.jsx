@@ -16,7 +16,7 @@ export default function Navbar() {
           onClick={() => navigate("/home")}
           className={`${
             location.pathname === "/home"
-              ? "text-rose-pink font-semibold"
+              ? "text-rose-pink underline underline-offset-8"
               : "text-dark-pink"
           } transition-all duration-300 hover:text-rose-pink font-medium md:text-xl`}
         >
@@ -26,7 +26,7 @@ export default function Navbar() {
           onClick={() => navigate("/favourites")}
           className={`${
             location.pathname === "/favourites"
-              ? "text-rose-pink font-semibold"
+              ? "text-rose-pink underline underline-offset-8"
               : "text-dark-pink"
           } transition-all duration-300 hover:text-rose-pink font-medium md:text-xl`}
         >
