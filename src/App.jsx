@@ -1,10 +1,16 @@
-// src/App.jsx
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Login from "./pages/Login";
+import RegisterUser from "./pages/RegisterUser";
+
 function App() {
   return (
-    <div className="bg-soft-pink text-dark-pink p-8 rounded-lg">
-      <h1 className="text-3xl font-bold text-rose-pink">Welcome to My Pink Themed Project!</h1>
-      <p className="text-blush-white">This is a soft white text.</p>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/registerUser" element={<RegisterUser />} />
+      </Routes>
+    </Router>
   );
 }
 
