@@ -1,10 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo.png";
-import { IconButton } from "@mui/material";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <nav className="flex items-center justify-between bg-white-snow px-5 md:px-32 py-4 shadow-md w-full">
@@ -14,13 +14,21 @@ export default function Navbar() {
       <div className="flex space-x-5 md:space-x-24">
         <button
           onClick={() => navigate("/home")}
-          className="text-dark-pink transition-all duration-300 hover:text-rose-pink font-medium md:text-xl"
+          className={`${
+            location.pathname === "/home"
+              ? "text-rose-pink font-semibold"
+              : "text-dark-pink"
+          } transition-all duration-300 hover:text-rose-pink font-medium md:text-xl`}
         >
           Home
         </button>
         <button
           onClick={() => navigate("/favourites")}
-          className="text-dark-pink transition-all duration-300 hover:text-rose-pink font-medium md:text-xl"
+          className={`${
+            location.pathname === "/favourites"
+              ? "text-rose-pink font-semibold"
+              : "text-dark-pink"
+          } transition-all duration-300 hover:text-rose-pink font-medium md:text-xl`}
         >
           Favourites
         </button>
