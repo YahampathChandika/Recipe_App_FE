@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 
 export default function Favourites() {
@@ -37,6 +37,11 @@ export default function Favourites() {
       name: "Smoothie",
     },
   ];
+
+  useEffect(() => {
+    document.title = "Favourites | Cook";
+  }, []);
+
   return (
     <div className="bg-blush-white min-h-screen">
       <Navbar userName="User Name" />

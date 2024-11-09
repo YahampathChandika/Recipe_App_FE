@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -65,6 +65,10 @@ export default function RegisterUser() {
   const handleLoginRedirect = () => {
     navigate("/");
   };
+
+  useEffect(() => {
+    document.title = "Register | Cook";
+  }, []);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

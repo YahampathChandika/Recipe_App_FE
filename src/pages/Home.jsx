@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGetRecipeByCategoryQuery } from "../store/api/recipeApi";
 import Navbar from "../components/Navbar";
 import { CircularProgress } from "@mui/material";
@@ -24,6 +24,10 @@ export default function Home() {
     setOpenModal(false);
     setSelectedRecipe(null);
   };
+
+  useEffect(() => {
+    document.title = "Home | Cook";
+  }, []);
 
   return (
     <div className="bg-blush-white min-h-screen">
