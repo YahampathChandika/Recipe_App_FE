@@ -50,9 +50,9 @@ export default function Home() {
             <CircularProgress color="error" />
           </div>
         ) : error ? (
-          <p className="text-center text-red-500">
+          <div className="flex justify-center items-center text-red-500 min-h-[500px] md:text-lg">
             Error loading recipes. Please try again later.
-          </p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10 px-2 py-4">
             {recipeData?.map((recipe) => (

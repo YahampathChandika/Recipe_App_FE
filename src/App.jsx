@@ -4,14 +4,19 @@ import Login from "./pages/Login";
 import RegisterUser from "./pages/RegisterUser";
 import Home from "./pages/Home";
 import Favourites from "./pages/Favourites";
+import PrivateRoute from "./routes/PrivateRoute";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/registerUser" element={<RegisterUser />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/favourites" element={<Favourites />} />
+      <Route element={<PrivateRoute />}>
+        <Route path="/home" element={<Home />} />
+        <Route path="/favourites" element={<Favourites />} />
+      </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
