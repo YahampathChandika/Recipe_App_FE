@@ -7,14 +7,12 @@ import Favourites from "./pages/Favourites";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/registerUser" element={<RegisterUser />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/favourites" element={<Favourites />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/registerUser" element={<RegisterUser />} />
+      <Route path="/home" element={<Home />} />
+      <Route path="/favourites" element={<Favourites />} />
+    </Routes>
   );
 }
 

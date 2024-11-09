@@ -1,38 +1,69 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
 import logo from "../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
+import { useLoginUserMutation } from "../store/api/authApi";
+import Swal from "sweetalert2";
+import { useForm } from "react-hook-form";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [loginUser, { isLoading }] = useLoginUserMutation();
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [loginError, setLoginError] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
 
-  const handleLogin = () => {
-    setEmailError("");
-    setPasswordError("");
-    setLoginError("");
+  const onSubmit = async (data) => {
+    try {
+      const response = await loginUser(data);
+      console.log("loginUser", response);
+      if (response.data && !response.data.error) {
+        const accessToken = response.data.token;
+        localStorage.setItem("accessToken", accessToken);
+        navigate("/home");
+        reset();
+        setErrorMessage(null);
 
-    if (!email || !password) {
-      if (!email) setEmailError("Please enter your email.");
-      if (!password) setPasswordError("Please enter your password.");
-      return;
-    }
-
-    if (email === "abc" && password === "0000") {
-      navigate("/home");
-    } else {
-      setLoginError("Your password or username is incorrect.");
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Welcome to Cook!",
+        });
+      } else {
+        setErrorMessage(
+          response?.error?.data?.message ||
+            response?.error?.data?.errors[0]?.msg ||
+            "Login failed"
+        );
+      }
+    } catch (error) {
+      console.error("Login Error", error);
+      setErrorMessage("An error occurred during login");
     }
   };
 
   const handleCreateAccount = () => {
     navigate("/registerUser");
   };
+
+  useEffect(() => {
+    document.title = "LogIn | Cook";
+  }, []);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -45,38 +76,49 @@ export default function Login() {
           LogIn
         </h2>
 
-        <TextField
-          label="Email Address"
-          variant="outlined"
-          fullWidth
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          error={!!emailError}
-          helperText={emailError}
-        />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextField
+            label="Email Address"
+            variant="outlined"
+            fullWidth
+            {...register("email", {
+              required: "Please enter your email.",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Please enter a valid email address.",
+              },
+            })}
+            error={!!errors.email}
+            helperText={errors.email?.message}
+          />
 
-        <TextField
-          label="Password"
-          type="password"
-          variant="outlined"
-          fullWidth
-          className="!mt-6 !mb-8"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          error={!!passwordError}
-          helperText={passwordError}
-        />
+          <TextField
+            label="Password"
+            type="password"
+            variant="outlined"
+            fullWidth
+            className="!mt-6 !mb-8"
+            {...register("password", {
+              required: "Please enter your password.",
+            })}
+            error={!!errors.password}
+            helperText={errors.password?.message}
+          />
 
-        <button
-          onClick={handleLogin}
-          className="bg-rose-pink w-full h-12 rounded-md hover:bg-dark-pink text-white transition-all duration-300"
-        >
-          SIGN IN
-        </button>
+          <button
+            type="submit"
+            className="bg-rose-pink w-full h-12 rounded-md hover:bg-dark-pink text-white transition-all duration-300"
+            disabled={isLoading}
+          >
+            SIGN IN
+          </button>
 
-        {loginError && (
-          <div className="text-sm md:text-base text-center text-red-500 mt-4">{loginError}</div>
-        )}
+          {errorMessage && (
+            <div className="text-sm md:text-base text-center text-red-500 mt-4">
+              {errorMessage}
+            </div>
+          )}
+        </form>
 
         <div className="text-center mt-8">
           <span className="text-sm text-gray-600">
