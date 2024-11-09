@@ -267,7 +267,8 @@ export default function Home() {
               bgcolor: "white",
               borderRadius: 3,
               boxShadow: 24,
-              p: 4,
+              px: 4,
+              py: 5,
               maxHeight: "80vh",
               overflowY: "auto",
               outline: "none",
@@ -275,11 +276,13 @@ export default function Home() {
               // Responsive styles
               "@media (max-width: 768px)": {
                 width: "90%",
-                p: 2,
+                px: 2,
+                py: 4
               },
               "@media (max-width: 480px)": {
                 width: "95%",
-                p: 2,
+                px: 2,
+                py: 4
               },
             }}
             className="text-dark-pink"
