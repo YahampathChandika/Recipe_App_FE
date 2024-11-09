@@ -3,20 +3,63 @@ import { useForm } from "react-hook-form";
 import { TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo.png";
+import { useAddUserMutation } from "../store/api/userApi";
+import Swal from "sweetalert2";
 
 export default function RegisterUser() {
   const navigate = useNavigate();
+  const [registerUser] = useAddUserMutation();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    reset,
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log("User registered:", data);
-    navigate("/home");
+
+    try {
+      const response = await registerUser(data);
+      if (response?.data && !response?.data?.error) {
+        reset();
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "User Registered!",
+        });
+        navigate("/");
+      } else {
+        console.log("User Adding failed!", response);
+        Swal.fire({
+          title: "Oops...",
+          text:
+            response?.error?.data?.payload ||
+            response?.data?.payload ||
+            "Failed to add record!",
+          icon: "error",
+        });
+      }
+    } catch (error) {
+      console.error("Failed to add record!", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to add record!",
+      });
+    }
   };
 
   const handleLoginRedirect = () => {
@@ -72,9 +115,9 @@ export default function RegisterUser() {
               label="Phone Number"
               variant="outlined"
               fullWidth
-              {...register("phone", { required: "Phone number is required" })}
-              error={!!errors.phone}
-              helperText={errors.phone?.message}
+              {...register("phoneNumber", { required: "Phone number is required" })}
+              error={!!errors.phoneNumber}
+              helperText={errors.phoneNumber?.message}
             />
 
             <TextField
