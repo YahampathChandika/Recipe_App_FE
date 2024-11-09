@@ -127,8 +127,8 @@ export default function Home() {
       strArea: "Italy",
       strInstructions: "Preheat oven to 375°F. Toast slices of baguette.",
       strYoutube: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      strIngredient1: "Baguette",
-      strMeasure1: "1 loaf",
+      strIngredient1: "Baguette , Tortilla Chips",
+      strMeasure1: "1 loaf , 2 kg",
       strSource: "https://www.themealdb.com/recipe.php?id=1",
     },
     {
@@ -279,7 +279,7 @@ export default function Home() {
               },
               "@media (max-width: 480px)": {
                 width: "95%",
-                p: 1,
+                p: 2,
               },
             }}
             className="text-dark-pink"
@@ -292,20 +292,24 @@ export default function Home() {
               alt={selectedRecipe.name}
               className="w-full h-36 md:h-48 object-cover mb-5"
             />
-            <p className="text-sm text-gray-600 mb-2">
-              <strong>Category: </strong>
-              {selectedRecipe.strCategory}
-            </p>
-            <p className="text-sm text-gray-600 mb-2">
-              <strong>Area: </strong>
-              {selectedRecipe.strArea}
-            </p>
-            <div className="mb-4">
-              <strong>Instructions: </strong>
+            <div className="flex justify-between mb-6 md:text-xl">
+              <div className="flex items-center">
+                <i class="fas fa-utensils"></i>
+                <p className=" font-semibold ml-2 md:ml-3">
+                  {selectedRecipe.strCategory}
+                </p>
+              </div>
+              <div className="flex items-center">
+                <i class="fas fa-globe"></i>
+                <p className=" font-semibold ml-2 md:ml-3">{selectedRecipe.strArea}</p>
+              </div>
+            </div>
+            <div className="mb-6">
+              <p className="md:text-lg font-semibold">Instructions: </p >
               <p>{selectedRecipe.strInstructions}</p>
             </div>
-            <div className="mb-4">
-              <strong>Ingredients: </strong>
+            <div className="mb-6">
+              <p className="md:text-lg font-semibold">Ingredients: </p >
               <p>
                 {selectedRecipe.strIngredient1} ({selectedRecipe.strMeasure1})
               </p>
@@ -315,7 +319,7 @@ export default function Home() {
                 href={selectedRecipe.strSource}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-rose-pink flex items-center space-x-1 hover:underline"
+                className="text-blue-500 flex items-center space-x-1 hover:text-blue-700 transition-all"
               >
                 <i className="fas fa-link"></i>
                 <span>Source</span>
@@ -324,10 +328,10 @@ export default function Home() {
                 href={selectedRecipe.strYoutube}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-rose-pink flex items-center space-x-1 hover:underline"
+                className="text-red-500 flex items-center space-x-1 hover:text-red-700 transition-all"
               >
                 <i className="fab fa-youtube"></i>
-                <span>Watch on Youtube</span>
+                <span>Youtube</span>
               </a>
             </div>
           </Box>
