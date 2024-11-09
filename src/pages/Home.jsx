@@ -1,23 +1,73 @@
 import React, { useEffect, useState } from "react";
 import { useGetRecipeByCategoryQuery } from "../store/api/recipeApi";
 import Navbar from "../components/Navbar";
-import { CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Modal } from "@mui/material";
+import { useAddFavouriteRecipeMutation } from "../store/api/favouriteApi";
+import Swal from "sweetalert2";
 
 export default function Home() {
   const [selectedType, setSelectedType] = useState("Chicken");
+  const [favorites, setFavorites] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+
   const {
     data: recipeData,
     isLoading,
     error,
   } = useGetRecipeByCategoryQuery(selectedType);
+  const [addFavoriteRecipe] = useAddFavouriteRecipeMutation();
 
   const recipeTypes = ["Chicken", "Pork", "Seafood", "Pasta", "Dessert"];
 
   const handleCardClick = (recipe) => {
     setSelectedRecipe(recipe);
     setOpenModal(true);
+  };
+
+  const handleFavoriteClick = async (recipe) => {
+    const {
+      idMeal: recipeId,
+      strMeal: recipeTitle,
+      strCategory: recipeCategory,
+      strMealThumb: recipeImgURL,
+    } = recipe;
+
+    try {
+      await addFavoriteRecipe({
+        recipeId,
+        recipeTitle,
+        recipeCategory: selectedType,
+        recipeImgURL,
+      });
+
+      // Update favorites state to indicate this recipe is now favorited
+      setFavorites(
+        (prevFavorites) =>
+          prevFavorites.includes(recipeId)
+            ? prevFavorites.filter((id) => id !== recipeId) // Remove if already in favorites
+            : [...prevFavorites, recipeId] // Add if not in favorites
+      );
+
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Recipe added to favourites!",
+      });
+    } catch (error) {
+      console.error("Error adding recipe to favourites:", error);
+      alert("Failed to add recipe to favourites.");
+    }
   };
 
   const handleCloseModal = () => {
@@ -78,8 +128,18 @@ export default function Home() {
                     </h3>
                   </div>
 
-                  <button className="mt-2 text-dark-pink hover:text-rose-pink">
-                    <span className="material-symbols-outlined">favorite</span>
+                  <button
+                    className="mt-2 text-dark-pink hover:text-rose-pink"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevents opening the modal
+                      handleFavoriteClick(recipe);
+                    }}
+                  >
+                    {favorites.includes(recipe.idMeal) ? (
+                      <i class="fas fa-heart text-xl"></i>
+                    ) : (
+                      <i class="far fa-heart text-xl"></i>
+                    )}
                   </button>
                 </div>
               </div>
