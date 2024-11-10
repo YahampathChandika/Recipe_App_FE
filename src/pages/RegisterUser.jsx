@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import { useAddUserMutation } from "../store/api/userApi";
@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 export default function RegisterUser() {
   const navigate = useNavigate();
   const [registerUser] = useAddUserMutation();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -19,8 +20,7 @@ export default function RegisterUser() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log("User registered:", data);
-
+    setLoading(true);
     try {
       const response = await registerUser(data);
       if (response?.data && !response?.data?.error) {
@@ -59,6 +59,8 @@ export default function RegisterUser() {
         title: "Error",
         text: "Failed to add record!",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -119,7 +121,9 @@ export default function RegisterUser() {
               label="Phone Number"
               variant="outlined"
               fullWidth
-              {...register("phoneNumber", { required: "Phone number is required" })}
+              {...register("phoneNumber", {
+                required: "Phone number is required",
+              })}
               error={!!errors.phoneNumber}
               helperText={errors.phoneNumber?.message}
             />
@@ -159,7 +163,11 @@ export default function RegisterUser() {
             type="submit"
             className="bg-rose-pink w-full h-12 rounded-md hover:bg-dark-pink text-white transition-all duration-300"
           >
-            Register
+            {loading ? (
+              <CircularProgress className="!text-white" size={16} />
+            ) : (
+              "REGISTER"
+            )}
           </button>
 
           {errors.form && (

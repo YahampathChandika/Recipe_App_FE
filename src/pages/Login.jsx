@@ -20,7 +20,7 @@ export default function Login() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
       const response = await loginUser(data);
       console.log("loginUser", response);
@@ -57,7 +57,7 @@ export default function Login() {
       console.error("Login Error", error);
       setErrorMessage("An error occurred during login");
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false); 
     }
   };
 
@@ -115,7 +115,7 @@ export default function Login() {
             disabled={loading}
           >
             {loading ? (
-              <CircularProgress className="!text-white"  size={16} />
+              <CircularProgress className="!text-white" size={16} />
             ) : (
               "SIGN IN"
             )}
