@@ -6,7 +6,11 @@ export const recipeApi = api.injectEndpoints({
     getRecipeByCategory: builder.query({
       query: (category) => `recipes/category/${category}`,
     }),
+
+    getRecipeById: builder.query({
+      query: (id) => `recipes/${id}`,
+    }),
   }),
 });
 
-export const { useGetRecipeByCategoryQuery } = recipeApi;
+export const { useGetRecipeByCategoryQuery, useGetRecipeByIdQuery } = recipeApi;
