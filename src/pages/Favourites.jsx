@@ -72,7 +72,7 @@ export default function Favourites() {
             alt="No favourites"
             className="w-24 md:w-48 mb-10"
           />
-          <p className="text-rose-pink text-lg md:text-2xl">
+          <p className="text-rose-pink md:text-2xl">
             No favourites yet. Start adding your favorite recipes!
           </p>
         </div>
