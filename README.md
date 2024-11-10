@@ -26,8 +26,8 @@ This is the frontend of the Recipe Web App, built with React-Vite. The applicati
 ### Installation
 
 1. Clone the repository:
-   git clone https://github.com/YahampathChandika/Recipe_App_FE.git
-   cd recipe_app_fe
+- git clone https://github.com/YahampathChandika/Recipe_App_FE.git
+- cd recipe_app_fe
    
 2. Install dependencies:
 - npm install
