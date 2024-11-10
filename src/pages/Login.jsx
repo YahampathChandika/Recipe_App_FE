@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { TextField } from "@mui/material";
+import { TextField, CircularProgress } from "@mui/material";
 import logo from "../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useLoginUserMutation } from "../store/api/authApi";
@@ -8,8 +8,9 @@ import { useForm } from "react-hook-form";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [loginUser, { isLoading }] = useLoginUserMutation();
+  const [loginUser] = useLoginUserMutation();
   const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -19,6 +20,7 @@ export default function Login() {
   } = useForm();
 
   const onSubmit = async (data) => {
+    setLoading(true); // Start loading
     try {
       const response = await loginUser(data);
       console.log("loginUser", response);
@@ -54,6 +56,8 @@ export default function Login() {
     } catch (error) {
       console.error("Login Error", error);
       setErrorMessage("An error occurred during login");
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -107,10 +111,14 @@ export default function Login() {
 
           <button
             type="submit"
-            className="bg-rose-pink w-full h-12 rounded-md hover:bg-dark-pink text-white transition-all duration-300"
-            disabled={isLoading}
+            className="bg-rose-pink w-full h-12 rounded-md hover:bg-dark-pink text-white transition-all duration-300 flex justify-center items-center"
+            disabled={loading}
           >
-            SIGN IN
+            {loading ? (
+              <CircularProgress className="!text-white"  size={16} />
+            ) : (
+              "SIGN IN"
+            )}
           </button>
 
           {errorMessage && (
