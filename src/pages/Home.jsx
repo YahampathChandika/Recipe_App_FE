@@ -105,6 +105,7 @@ export default function Home() {
   const handleCloseModal = () => {
     setOpenModal(false);
     setSelectedRecipeId(null);
+    setShowFullInstructions(false);
   };
 
   useEffect(() => {

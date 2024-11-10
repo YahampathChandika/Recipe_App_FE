@@ -39,6 +39,7 @@ export default function Favourites() {
   const handleCloseModal = () => {
     setOpenModal(false);
     setSelectedRecipeId(null);
+    setShowFullInstructions(false);
   };
 
   const toggleInstructions = () => {
