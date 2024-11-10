@@ -29,6 +29,11 @@ export default function Navbar() {
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Logout",
+      customClass: {
+        popup: "w-10/12 max-w-xs md:max-w-lg",
+        title: "text-lg md:text-2xl",
+        icon: "text-sm md:text-lg",
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.clear();

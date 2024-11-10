@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useGetRecipeByCategoryQuery } from "../store/api/recipeApi";
 import Navbar from "../components/Navbar";
 import { Box, CircularProgress, Modal } from "@mui/material";
-import { useAddFavouriteRecipeMutation } from "../store/api/favouriteApi";
+import {
+  useAddFavouriteRecipeMutation,
+  useGetFavouriteRecipesQuery,
+} from "../store/api/favouriteApi";
 import Swal from "sweetalert2";
 
 export default function Home() {
@@ -17,6 +20,7 @@ export default function Home() {
     error,
   } = useGetRecipeByCategoryQuery(selectedType);
   const [addFavoriteRecipe] = useAddFavouriteRecipeMutation();
+  const { refetch: refetchFavourites } = useGetFavouriteRecipesQuery();
 
   const recipeTypes = ["Chicken", "Pork", "Seafood", "Pasta", "Dessert"];
 
@@ -34,7 +38,7 @@ export default function Home() {
     } = recipe;
 
     try {
-      await addFavoriteRecipe({
+      const response = await addFavoriteRecipe({
         recipeId,
         recipeTitle,
         recipeCategory: selectedType,
@@ -49,24 +53,44 @@ export default function Home() {
             : [...prevFavorites, recipeId] // Add if not in favorites
       );
 
+      refetchFavourites();
+
       const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
         showConfirmButton: false,
-        timer: 1000,
+        timer: 1500,
         timerProgressBar: true,
         didOpen: (toast) => {
           toast.onmouseenter = Swal.stopTimer;
           toast.onmouseleave = Swal.resumeTimer;
         },
       });
-      Toast.fire({
-        icon: "success",
-        title: "Recipe added to favourites!",
-      });
+
+      if (response.error) {
+        Toast.fire({
+          icon: "warning",
+          title:
+            response.error.data?.message || "Recipe already in favourites.",
+        });
+      } else {
+        Toast.fire({
+          icon: "success",
+          title: response.data?.message || "Recipe added to favourites!",
+        });
+      }
     } catch (error) {
       console.error("Error adding recipe to favourites:", error);
-      alert("Failed to add recipe to favourites.");
+      Swal.fire({
+        icon: "error",
+        title: "Failed to add recipe to favourites.",
+        text: "Please try again later.",
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+      });
     }
   };
 
